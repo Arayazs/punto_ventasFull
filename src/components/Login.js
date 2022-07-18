@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import aseAuth from "../helpers/useAuth";
 import config from "../helpers/config.json";
+import useAuth from "../helpers/useAuth";
 
 const login = () => {
   const { setAuth } = useAuth();
@@ -147,3 +147,4 @@ const login = () => {
     </div>
   );
 };
+export default login;
