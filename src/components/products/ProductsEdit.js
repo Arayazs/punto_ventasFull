@@ -2,10 +2,11 @@ import React from "react";
 import Sidebar from "../Sidebar";
 import Topbar from "../Topbar";
 import { useNavigate } from "react-router-dom";
-import config from "./../../helpers/config.json";
+import config from "../../helpers/config.json";
 
-const ProductsAdd = () => {
+const ProductsEdit = () => {
   let navigate = useNavigate();
+  let productData = JSON.parse(sessionStorage.getItem("product"));
   const cancel = () => {
     var { productName, MSU, price, stock, MDPrice, MDPercentage } =
       document.forms[0];
@@ -46,7 +47,7 @@ const ProductsAdd = () => {
       window.alert("Corrija los siguientes errores:\n" + errors);
     } else {
       const requestOptions = {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           operatorId: config.operatorId,
@@ -56,9 +57,10 @@ const ProductsAdd = () => {
           stock: stock.value,
           MDPrice: MDPrice.value,
           MDPercentage: MDPercentage.value,
+          active: productData.active,
         }),
       };
-      fetch(config.apiURL + "products", requestOptions)
+      fetch(config.apiURL + "products/" + productData.id, requestOptions)
         .then((response) => {
           switch (response.status) {
             case 400:
@@ -73,7 +75,7 @@ const ProductsAdd = () => {
           return response.json();
         })
         .then((result) => {
-          window.alert("Regitro existoso");
+          window.alert("Actualizacion existosa");
           navigate("/products");
         });
     }
@@ -118,6 +120,7 @@ const ProductsAdd = () => {
                         name="productName"
                         id="productName"
                         className="form-control"
+                        defaultValue={productData.name}
                         required
                       />
                     </div>
@@ -132,6 +135,7 @@ const ProductsAdd = () => {
                         name="MSU"
                         id="MSU"
                         className="form-control"
+                        defaultValue={productData.MSU}
                         required
                       />
                     </div>
@@ -146,6 +150,7 @@ const ProductsAdd = () => {
                         name="price"
                         id="price"
                         className="form-control"
+                        defaultValue={productData.price}
                         required
                       />
                     </div>
@@ -160,6 +165,7 @@ const ProductsAdd = () => {
                         name="stock"
                         id="stock"
                         className="form-control"
+                        defaultValue={productData.stock}
                         required
                       />
                     </div>
@@ -174,6 +180,7 @@ const ProductsAdd = () => {
                         name="MDPrice"
                         id="MDPrice"
                         className="form-control"
+                        defaultValue={productData.MDPrice}
                         required
                       />
                     </div>
@@ -187,6 +194,7 @@ const ProductsAdd = () => {
                         type="number"
                         name="MDPercentage"
                         id="MDPercentage"
+                        defaultValue={productData.MDPercentage}
                         className="form-control"
                         max="50"
                         min="0"
@@ -216,4 +224,4 @@ const ProductsAdd = () => {
   );
 };
 
-export default ProductsAdd;
+export default ProductsEdit;

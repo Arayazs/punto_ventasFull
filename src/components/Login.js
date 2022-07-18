@@ -3,9 +3,31 @@ import { useNavigate } from "react-router-dom";
 import config from "../helpers/config.json";
 import useAuth from "../helpers/useAuth";
 
-const login = () => {
+const Login = () => {
   const { setAuth } = useAuth();
   let navigate = useNavigate();
+
+  const changeButtonState = (button, enabled) => {
+    if (enabled) {
+      button.disabled = false;
+      button.innerHTML = "<i class='fa fa-sign-in'></i> Acceder";
+    } else {
+      button.disabled = true;
+      button.innerHTML = "<i class='fa fa-spin fa-spinner'></i> Acceiendo..";
+    }
+  };
+
+  const showMessage = (visible, message) => {
+    const messageBox = document.querySelector(".alert");
+    const reasonBox = document.querySelector("#reason");
+    if (visible) {
+      reasonBox.innerHTML = message;
+      messageBox.classList.remove("d-none");
+    } else {
+      reasonBox.innerHTML = "";
+      messageBox.classList.add("d-none");
+    }
+  };
 
   const logger = async (event) => {
     event.preventDefault();
@@ -32,6 +54,10 @@ const login = () => {
     fetch(config.apiURL + "login", requestOptions)
       .then((response) => {
         switch (response.status) {
+          case 400:
+            showMessage(true, "Consulta mal formada");
+            changeButtonState(button, true);
+            break;
           case 403:
             showMessage(true, "Acceso prohibido");
             changeButtonState(button, true);
@@ -53,7 +79,7 @@ const login = () => {
         }
         try {
           const infoData = result.data[0];
-          const infoUse = JSON.stringify(infoData);
+          const infoUser = JSON.stringify(infoData);
           showMessage(false, "");
           changeButtonState(button, true);
           localStorage.setItem("user", infoUser);
@@ -69,28 +95,6 @@ const login = () => {
       });
   };
 
-  const changeButtonState = (button, enabled) => {
-    if (enabled) {
-      button.disabled = false;
-      button.innerHTML = "<i class='fa fa-sign-in'></i> Acceder";
-    } else {
-      button.disabled = true;
-      button.innerHTML = "<i class='fa fa-spin fa-spinner'></i> Acceiendo..";
-    }
-  };
-
-  const showMessage = (visible, message) => {
-    const messageBox = document.querySelector(".alert");
-    const reasonBox = document.querySelector("#reason");
-    if (visible) {
-      reasonBox.innerHTML = message;
-      messageBox.classList.remove("d-none");
-    } else {
-      reasonBox.innerHTML = "";
-      messageBox.classList.add("d-none");
-    }
-  };
-
   return (
     <div className="hold-transition login-page">
       <div className="login-box">
@@ -101,8 +105,9 @@ const login = () => {
         </div>
         <div className="card">
           <div className="card-body login-card-body">
-            <p className="login-box-msg">Sign in to start your session</p>
-            <form>
+            <p className="login-box-msg">Inicie sesion para comenzar</p>
+
+            <form onSubmit={logger}>
               <div className="input-group mb-3">
                 <input
                   type="text"
@@ -136,7 +141,6 @@ const login = () => {
                 </div>
               </div>
             </form>
-            <form onSubmit={logger}>-</form>
             <div className="alert alert-danger d-none" role="alert">
               <strong>Error!</strong>
               <p id="reason"></p>
@@ -147,4 +151,4 @@ const login = () => {
     </div>
   );
 };
-export default login;
+export default Login;
