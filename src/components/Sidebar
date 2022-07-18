@@ -1,0 +1,48 @@
+import React from "react";
+import { Link } from "react-router-dom";
+const Sidebar = () => {
+  return (
+    <aside className="main-sider siderbar-dark-primary elevation-4 ">
+      <a href="#" className="brand-link"></a>
+      <div className="sidebar">
+        <div className=" user-panel mt-3 pb-3 d-flex"></div>
+      </div>
+      <nav className="mt-2">
+        <ul
+          className="nav nav-pills nav-sidebar flex-column"
+          data-widget="treeview"
+          role="menu"
+          data-accordion="false"
+        >
+          <li className="nav-header">ACCESOS</li>
+          <li className="nav-item">
+            <link to="/sales" className="nav-link">
+              <i className="nav-icon fas fa-cart-shopping" />
+              <p>Ventas</p>
+            </link>
+          </li>
+          <li className="nav-item">
+            <link to="/sales" className="nav-link">
+              <i className="nav-icon fas fa-user" />
+              <p>clientes</p>
+            </link>
+          </li>
+          <li className="nav-item">
+            <link to="/products" className="nav-link">
+              <i className="nav-icon fas fa-box" />
+              <p>Productos</p>
+            </link>
+          </li>
+          <li className="nav-item">
+            <link to="/sales" className="nav-link">
+              <i className="nav-icon fas fa-user" />
+              <p>Usuarios</p>
+            </link>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  );
+};
+
+export default Sidebar;
